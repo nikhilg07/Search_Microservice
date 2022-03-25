@@ -1,14 +1,12 @@
 package com.quinbay.ecommerce.search_microservice.controller;
 
-import com.quinbay.ecommerce.search_microservice.entity.ProductEntity;
+import com.quinbay.ecommerce.search_microservice.dto.Product;
 import com.quinbay.ecommerce.search_microservice.repository.ProductRepository;
 import com.quinbay.ecommerce.search_microservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 public class SearchController {
@@ -19,28 +17,47 @@ public class SearchController {
     @Autowired
     ProductService productService;
 
-    @GetMapping(value = "/productName" , consumes = "appplication/json")
-    public ProductEntity getProductByName(@RequestParam("name") String ProdName){
-        Optional<ProductEntity> prod = productRepository.findById(ProdName);
-        if(prod.isPresent()){
-            return prod.get();
-        }else{
-            return null;
-        }
+//    @GetMapping(value = "/productName" , consumes = "application/json")
+//    public List<ProductEntity> getProductByName(@RequestParam("name") String name){
+//        return productRepository.findByProductName(name);
+//    }
+//
+//
+//    @GetMapping(value = "/categoryName" , consumes = "application/json")
+//    public List<ProductEntity> getProductByCategory(@RequestParam("name") String name){
+//        return productRepository.findByCategory(name);
+//    }
+//
+//    @GetMapping(value = "/categoryName" , consumes = "application/json")
+//    public List<ProductEntity> getProductByTitle(@RequestParam("name") String name){
+//        return productRepository.findByProductTitle(name);
+//    }
+//
+//
+//    @GetMapping (value = "/findProduct")
+//    public List<ProductEntity> getProductByQuery(@RequestParam String s){
+//        return productRepository.findByCustomerQuery(s);
+//    }
+
+    @GetMapping(value = "/getProductDetails")
+    public List<Product> getProduct(@RequestParam String searchTerm) {
+
+       return productService.getProductDetails(searchTerm);
+
+
     }
 
 
-    @GetMapping (value = "/productByCategory")
-    public ProductEntity getProductByCategory(@RequestParam("category") String category){
-        Iterable<ProductEntity> prod = productRepository.findAll();
-        for(ProductEntity product : prod){
-            if(product.getCategory().equals(category)){
-                return product;
-            }
-        }
 
-        return null;
+
+    @PostMapping (value="/addProductToSolr")
+    public void addProd(@RequestBody Product product){
+        productService.addProduct(product);
     }
+
+
+
 
 
 }
+

@@ -1,9 +1,11 @@
 package com.quinbay.ecommerce.search_microservice.service;
 
+import com.quinbay.ecommerce.search_microservice.dto.Product;
 
-import com.quinbay.ecommerce.search_microservice.entity.ProductEntity;
+import java.util.List;
 
 public interface ProductService {
 
-    void addProduct(ProductEntity productEntity);
+    void addProduct(Product product);
+    List<Product> getProductDetails(String searchTerm);
 }
